@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<head>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 <style>
 
 .background {
@@ -9,7 +11,7 @@
 .ward.feature {
   fill: #ccc;
   cursor: pointer;
-  opacity: .7;
+  opacity: .4;
 }
 .ward.deemph {
   opacity: .9;
@@ -42,7 +44,7 @@
 .ward.mesh {
   fill: none;
   stroke: #fff;
-  stroke-width: 1px;
+  stroke-width: 3px;
   stroke-linejoin: round;
   pointer-events: none;
 }
@@ -53,12 +55,14 @@
 }
 
 </style>
+</head>
 <body>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 <script src="http://d3js.org/d3.v4.0.0-alpha.26.min.js"></script>
 <h3>Map of Calgary Communities</h3>
+<p id="explainer">Oh, they're in wards</p>
 <script src="map.js"></script>
 </body>
 </html>

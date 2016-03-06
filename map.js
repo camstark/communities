@@ -51,9 +51,16 @@ function ready(error, communities, wards) {
     .translate(t)
 
 var colours = d3.scale.category10();
+var colours = d3.scale.ordinal()
+                  .domain([ "PARKS","EMPLOYMENT", "CENTRE CITY", "INNER CITY", "1950s", "1960s/1970s", "1980s/1990s", "2000s", "BUILDING OUT", "UNDEVELOPED", "OTHER"
+])
+.range(["#e5f5e0","#fdd49e","#67000d","#a50f15","#cb181d","#ef3b2c","#fb6a4a","#fc9272","#fcbba1","#fee0d2","#fff5f0","#fff"])
 
   c = g.append("g").classed("community", true)
   cb = g.append("g").classed("communityBoundary", true)
+
+
+
 
   c.selectAll("path")
     .data(communityPolygons.features)
@@ -92,17 +99,21 @@ function mouseover(d) {
   w.selectAll("path").classed("deemph", true)
   chosenWard = d3.select(this);
   chosenWard.classed("hover", true)
+  $("#explainer").text("Oh, it's " + d.properties["LABEL"] + " (" + d.properties["ALDERMAN"] + ")")
 }
 function mouseout() {
   w.selectAll("path").classed("hover deemph", false)
+  $("#explainer").text("Oh, we're done?")
 }
 function mouseoverCommunity(d) {
   c.selectAll("path").classed("deemph", true)
   chosenCommunity = d3.select(this);
   chosenCommunity.classed("hover", true)
+  $("#explainer").text("Oh, it's " + d.properties["NAME"] + " (" + d.properties["COMM_STRUC"] + ")")
 }
 function mouseoutCommunity() {
   chosenCommunity.classed("hover", false)
+  $("#explainer").text("Oh, we're done?")
 }
 function clicked(d) {
   if (active.node() === this) return reset();
@@ -131,5 +142,6 @@ function reset() {
       .style("stroke-width", "1.5px")
       .attr("transform", "");
 
+  c.selectAll("path").classed("hover deemph", false);
   w.selectAll("path").classed("hover deemph", false).on("mouseover", mouseover).on("mouseout", mouseout)
 }
