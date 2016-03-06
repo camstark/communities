@@ -109,10 +109,12 @@ function mouseoverCommunity(d) {
   c.selectAll("path").classed("deemph", true)
   chosenCommunity = d3.select(this);
   chosenCommunity.classed("hover", true)
+  // chosenCommunity.classed("deemph", true)
   $("#explainer").text("Oh, it's " + d.properties["NAME"] + " (" + d.properties["COMM_STRUC"] + ")")
 }
 function mouseoutCommunity() {
   chosenCommunity.classed("hover", false)
+  c.selectAll("path").classed("deemph", false)
   $("#explainer").text("Oh, we're done?")
 }
 function clicked(d) {
@@ -133,6 +135,7 @@ function clicked(d) {
       .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
   w.selectAll("path").on("mouseover", null).on("mouseout", null);
   c.selectAll("path").on("mouseover", mouseoverCommunity).on("mouseout", mouseoutCommunity);
+  cb.selectAll("path").classed("visible", true)
 }
 function reset() {
   active.classed("active", false);
@@ -144,4 +147,5 @@ function reset() {
 
   c.selectAll("path").classed("hover deemph", false);
   w.selectAll("path").classed("hover deemph", false).on("mouseover", mouseover).on("mouseout", mouseout)
+  cb.selectAll("path").classed("visible", false)
 }

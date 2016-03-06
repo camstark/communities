@@ -11,13 +11,13 @@
 .ward.feature {
   fill: #ccc;
   cursor: pointer;
-  opacity: .4;
+  opacity: .05;
 }
 .ward.deemph {
   opacity: .9;
 }
 .community.deemph {
-  opacity: .5;
+  opacity: .7;
 }
 .ward.feature.hover {
   opacity: .05;
@@ -36,6 +36,13 @@
 
 .community.mesh {
   fill: none;
+  /*stroke: #fff;
+  stroke-width: .5px;
+  stroke-linejoin: round;*/
+  stroke: none;
+  pointer-events: none;
+}
+.community.mesh.visible {
   stroke: #fff;
   stroke-width: .5px;
   stroke-linejoin: round;
@@ -44,7 +51,7 @@
 .ward.mesh {
   fill: none;
   stroke: #fff;
-  stroke-width: 3px;
+  stroke-width: 2px;
   stroke-linejoin: round;
   pointer-events: none;
 }
