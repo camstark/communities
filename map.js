@@ -18,8 +18,7 @@ var width = $(window).width(),
   var g = svg.append("g")
       .style("stroke-width", "1.5px");
 
-var jsonpath = "http://github.com/camstark/calgis/blob/master/CALGIS_ADM_COMMUNITY_DISTRICT/CALGIS_ADM_COMMUNITY_DISTRICT.json"
-//var jsonpath = "../../../CALGIS/CALGIS_ADM_COMMUNITY_DISTRICT/CALGIS_ADM_COMMUNITY_DISTRICT.json"
+var jsonpath = "http://camstark.github.io/calgis/CALGIS_ADM_COMMUNITY_DISTRICT/CALGIS_ADM_COMMUNITY_DISTRICT.json"
 
 d3.json(jsonpath, function(error, calgary) {
   if (error) return console.error(error);
