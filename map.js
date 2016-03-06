@@ -1,5 +1,6 @@
 var width = $(window).width(),
     height = width * 1.1,
+    // height = $(window).height(),
     active = d3.select(null);
 
   projection = d3.geo.mercator();
@@ -18,19 +19,29 @@ var width = $(window).width(),
   var g = svg.append("g")
       .style("stroke-width", "1.5px");
 
-var jsonpath = "http://camstark.github.io/calgis/CALGIS_ADM_COMMUNITY_DISTRICT/CALGIS_ADM_COMMUNITY_DISTRICT.json"
+  var jsoncommunities = "http://camstark.github.io/calgis/CALGIS_ADM_COMMUNITY_DISTRICT/CALGIS_ADM_COMMUNITY_DISTRICT.json"
+  var jsonwards = "http://camstark.github.io/calgis/CALGIS_ADM_WARD/CALGIS_ADM_WARD.json"
 
-d3.json(jsonpath, function(error, calgary) {
+d3.queue()
+    .defer(d3.json, jsoncommunities)
+    .defer(d3.json, jsonwards)
+    .await(ready)
+
+function ready(error, communities, wards) {
+// d3.json(jsoncommunities, function(error, calgary) {
   if (error) return console.error(error);
 
-  var communities = topojson.feature(calgary, calgary.objects.CALGIS_ADM_COMMUNITY_DISTRICT)
-  var communityBoundaries = topojson.mesh(calgary, calgary.objects.CALGIS_ADM_COMMUNITY_DISTRICT, function(a, b) { return a !== b; })
+  var communityPolygons = topojson.feature(communities, communities.objects.CALGIS_ADM_COMMUNITY_DISTRICT)
+  var communityBoundaries = topojson.mesh(communities, communities.objects.CALGIS_ADM_COMMUNITY_DISTRICT, function(a, b) { return a !== b; })
+
+  var wardPolygons = topojson.feature(wards, wards.objects.CALGIS_ADM_WARD)
+  var wardBoundaries = topojson.mesh(wards, wards.objects.CALGIS_ADM_WARD, function(a, b) { return a !== b; })
 
   projection
     .scale(1)
     .translate([0,0])
 
-  var b = path.bounds(communities),
+  var b = path.bounds(communityPolygons),
     s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
     t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
 
@@ -38,18 +49,35 @@ d3.json(jsonpath, function(error, calgary) {
     .scale(s)
     .translate(t)
 
-  g.selectAll("path")
-      .data(communities.features)
+  var c = g.append("g").classed("community", true)
+
+  c.selectAll("path")
+    .data(communityPolygons.features)
+  .enter().append("path")
+    .attr("class", "community feature")
+    .attr("d", path)
+    .on("click", clicked)
+
+  c.append("path")
+      .datum(communityBoundaries)
+      .attr("class", "community mesh")
+      .attr("d", path)
+
+  var w = g.append("g").classed("ward", true)
+
+  w.selectAll("path")
+      .data(wardPolygons.features)
     .enter().append("path")
-      .attr("class", "feature")
+      .attr("class", "ward feature")
       .attr("d", path)
       .on("click", clicked)
 
-  g.append("path")
-      .datum(communityBoundaries)
-      .attr("class", "mesh")
+  w.append("path")
+      .datum(wardBoundaries)
+      .attr("class", "ward mesh")
       .attr("d", path)
-})
+
+}
 
 function clicked(d) {
   if (active.node() === this) return reset();

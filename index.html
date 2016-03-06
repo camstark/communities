@@ -7,22 +7,34 @@
   pointer-events: all;
 }
 
-.feature {
+.ward.feature {
   fill: #ccc;
+  cursor: pointer;
+  opacity: .9;
+}
+.community.feature {
+  fill: #5b6770;
   cursor: pointer;
 }
 
 .feature.active {
-  fill: cornflowerblue;
+  /*fill: cornflowerblue;*/
+  /*fill: none;*/
+  opacity: .05;
 }
 
-.mesh {
+.community.mesh {
   fill: none;
   stroke: #fff;
   stroke-width: .5px;
   stroke-linejoin: round;
 }
-
+.ward.mesh {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
 .outline {
   fill: #ddd;
   stroke: #000;
@@ -34,8 +46,8 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<script src="http://d3js.org/d3.v4.0.0-alpha.26.min.js"></script>
 <h3>Map of Calgary Communities</h3>
-<div id="vis"></div>
 <script src="map.js"></script>
 </body>
 </html>
