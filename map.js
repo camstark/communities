@@ -19,6 +19,8 @@ var width = $(window).width(),
   var g = svg.append("g")
       .style("stroke-width", "1.5px");
 
+  var w,c,wb,cb
+
   var jsoncommunities = "http://camstark.github.io/calgis/CALGIS_ADM_COMMUNITY_DISTRICT/CALGIS_ADM_COMMUNITY_DISTRICT.json"
   var jsonwards = "http://camstark.github.io/calgis/CALGIS_ADM_WARD/CALGIS_ADM_WARD.json"
 
@@ -28,7 +30,6 @@ d3.queue()
     .await(ready)
 
 function ready(error, communities, wards) {
-// d3.json(jsoncommunities, function(error, calgary) {
   if (error) return console.error(error);
 
   var communityPolygons = topojson.feature(communities, communities.objects.CALGIS_ADM_COMMUNITY_DISTRICT)
@@ -49,39 +50,64 @@ function ready(error, communities, wards) {
     .scale(s)
     .translate(t)
 
-  var c = g.append("g").classed("community", true)
+var colours = d3.scale.category10();
+
+  c = g.append("g").classed("community", true)
+  cb = g.append("g").classed("communityBoundary", true)
 
   c.selectAll("path")
     .data(communityPolygons.features)
   .enter().append("path")
     .attr("class", "community feature")
+    // .style("fill", function(d) {console.log(d.properties["SRG"]) })
+    .style("fill", function(d) {return colours(d.properties["COMM_STRUC"]) })
     .attr("d", path)
     .on("click", clicked)
 
-  c.append("path")
+  cb.append("path")
       .datum(communityBoundaries)
       .attr("class", "community mesh")
       .attr("d", path)
 
-  var w = g.append("g").classed("ward", true)
+  w = g.append("g").classed("ward", true)
+  wb = g.append("g").classed("wardBoundary", true)
 
   w.selectAll("path")
       .data(wardPolygons.features)
     .enter().append("path")
       .attr("class", "ward feature")
       .attr("d", path)
+      .on("mouseover", mouseover)
+      .on("mouseout", mouseout)
       .on("click", clicked)
 
-  w.append("path")
+  wb.append("path")
       .datum(wardBoundaries)
       .attr("class", "ward mesh")
       .attr("d", path)
 
 }
-
+var chosenWard, chosenCommunity
+function mouseover(d) {
+  w.selectAll("path").classed("deemph", true)
+  chosenWard = d3.select(this);
+  chosenWard.classed("hover", true)
+}
+function mouseout() {
+  w.selectAll("path").classed("hover deemph", false)
+}
+function mouseoverCommunity(d) {
+  c.selectAll("path").classed("deemph", true)
+  chosenCommunity = d3.select(this);
+  chosenCommunity.classed("hover", true)
+}
+function mouseoutCommunity() {
+  chosenCommunity.classed("hover", false)
+}
 function clicked(d) {
   if (active.node() === this) return reset();
-  active.classed("active", false);
+  active.classed("active hover", false);
+  // active.classed("hover", false);
   active = d3.select(this).classed("active", true);
   var bounds = path.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
@@ -94,6 +120,8 @@ function clicked(d) {
       .duration(750)
       .style("stroke-width", 1.5 / scale + "px")
       .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+  w.selectAll("path").on("mouseover", null).on("mouseout", null);
+  c.selectAll("path").on("mouseover", mouseoverCommunity).on("mouseout", mouseoutCommunity);
 }
 function reset() {
   active.classed("active", false);
@@ -102,4 +130,6 @@ function reset() {
       .duration(750)
       .style("stroke-width", "1.5px")
       .attr("transform", "");
+
+  w.selectAll("path").classed("hover deemph", false).on("mouseover", mouseover).on("mouseout", mouseout)
 }

@@ -6,21 +6,30 @@
   fill: none;
   pointer-events: all;
 }
-
 .ward.feature {
   fill: #ccc;
   cursor: pointer;
+  opacity: .7;
+}
+.ward.deemph {
   opacity: .9;
+}
+.community.deemph {
+  opacity: .5;
+}
+.ward.feature.hover {
+  opacity: .05;
 }
 .community.feature {
   fill: #5b6770;
   cursor: pointer;
 }
+.community.feature.hover {
+  opacity: 1;
+}
 
-.feature.active {
-  /*fill: cornflowerblue;*/
-  /*fill: none;*/
-  opacity: .05;
+.ward.feature.active {
+  fill:none;
 }
 
 .community.mesh {
@@ -28,12 +37,14 @@
   stroke: #fff;
   stroke-width: .5px;
   stroke-linejoin: round;
+  pointer-events: none;
 }
 .ward.mesh {
   fill: none;
   stroke: #fff;
   stroke-width: 1px;
   stroke-linejoin: round;
+  pointer-events: none;
 }
 .outline {
   fill: #ddd;
