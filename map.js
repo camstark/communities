@@ -69,7 +69,7 @@ var colours = d3.scale.ordinal()
     // .style("fill", function(d) {console.log(d.properties["SRG"]) })
     .style("fill", function(d) {return colours(d.properties["COMM_STRUC"]) })
     .attr("d", path)
-    .on("click", clicked)
+    .on("click", reset)
 
   cb.append("path")
       .datum(communityBoundaries)
