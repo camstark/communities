@@ -1,6 +1,6 @@
 var width = $(window).width(),
     // height = width * 1.1,
-    height = $(window).height(),
+    height = $(window).height() -80,
     active = d3.select(null);
 
   projection = d3.geo.mercator();
